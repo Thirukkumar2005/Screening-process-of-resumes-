@@ -1,0 +1,15 @@
+\\1.import librarie
+\\we need numpy for numerical arrays,skfuzzy for the fuzzy logic engine and matplotlib for plotting the resutls.
+import numpy as np
+import skfuzzy as fuzz
+import matplotlib.pyplot as plt
+from skfuzzy import control as ctrl
+\\DEFINE FUZZY VARIABLES(INPUTS AND OUTPUT)
+\\These are the input(antecedents)and the output(consequent)of our system.
+\\we define their "universe" or range of possible values.
+\\INPUT1:Relevent experience(in year)
+\\Range: 0 to 15 years
+experience=ctrl.Antecendent(np.arrange(0,16,1),'experience')
+\\INPUT2:skill match(as a percentage)
+\\Range:0% to 100%
+skill_match=ctrl.Antecedent(np.arrange(0,101,1),'skill_match')
