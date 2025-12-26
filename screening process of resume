@@ -13,3 +13,38 @@ experience=ctrl.Antecendent(np.arrange(0,16,1),'experience')
 \\INPUT2:skill match(as a percentage)
 \\Range:0% to 100%
 skill_match=ctrl.Antecedent(np.arrange(0,101,1),'skill_match')
+\\INPUT3:Education level(as a numerical score)
+\\Range:1 to 5(e.g.,1=Diploma,3=Bachelore's,5=PHD)
+education=ctrl.Antecedent(np.arrange(1,6,1),'education')
+\\OUTPUT:candidate fit score
+\Range:0 to 100 points
+candidate_fit=ctrl.consequent(np.arange(0,101,1),'candidate_fit')
+\\DEFINE MEMBERSHIP FUNCTIONS
+\\here,we define the fuzzy sets for each variable(e.g.,"Low","Medium","High")
+\\we use triangular membership function(trimf)for simplicity.
+\\The numbers in the list represent the [start,peak,end]of the triangle.
+\\Membership function for 'experience'
+experience['None']=fuzz.trimf(experience.universe,[0,0,2])
+experience['Some']=fuzz.trimf(experience.universe,[1,4,7])
+experience['Matched']=fuzz.trimf(experience.universe,[5,8,11])
+experience['Extensive']=fuzz.trimf(experience.universe,[9,15,15])
+\\Membership function for 'Skill_match'
+skill_match['Low']=fuzz.trimf(skill_match.universe,[0,0,50])
+skill_match['Medium']=fuzz.trimf(skill_match.universe,[30,65,90])
+skill_match['High']=fuzz.trimf(skill_match.universe,[70,100,100])
+\\Membership function for 'education'
+education['Relevant']=fuzz.trimf(education.universe,[1,3,4])
+education['Advanced']=fuzz.trimf(education.universe,[3,5,5])
+\\Membership function for 'candidate_fit'
+candidate_fit['Poor Fit']=fuzz.trimf(candidate_fit.universe,[0,0,40])
+candidate_fit['Possible Fit']=fuzz.trimf(candidate_fit.universe,[30,55,75])
+candidate_fit['Good Fit']=fuzz.trimf(candidate_fit.universe,[65,80,95])
+candidate_fit['Top Candidate']=fuzz.trimf(candidate_fit.universe,[85,100,100])
+
+
+
+
+
+
+
+
