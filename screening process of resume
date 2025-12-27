@@ -40,6 +40,35 @@ candidate_fit['Poor Fit']=fuzz.trimf(candidate_fit.universe,[0,0,40])
 candidate_fit['Possible Fit']=fuzz.trimf(candidate_fit.universe,[30,55,75])
 candidate_fit['Good Fit']=fuzz.trimf(candidate_fit.universe,[65,80,95])
 candidate_fit['Top Candidate']=fuzz.trimf(candidate_fit.universe,[85,100,100])
+\\You can uncomment these line to see the graphs of your membership functions.
+\\This is very useful for report!
+\\experience.view()
+\\skill_match.view()
+\\education.view()
+\\candidate_fit.view()
+\\DEFINE THE FUZZY RULES
+\\These are the IF-THEN rules that from "brain" of our system.
+\\The symbols are:& for AND,I for OR.
+rule1=ctrl.Rule(skill_match['High'] & experience['Matched'],candidate_fit['Top Candidate'])
+rule2=ctrl.Rule(skill_match['High'] & experience['Some'],candidate_fit['Good Fit'])
+rule3=ctrl.Rule(skill_match['Medium'] & experience['Matched'],candidate_fit['Good Fit'])
+rule4=ctrl.Rule(skill_match['Low'],candidate_fit['Poor Fit'])
+rule5=ctrl.Rule(skill_match['None'],candidate_fit['Poor Fit'])
+rule6=ctrl.Rule(skill_match['High'] & education['Advanced'],candidate_fit['Top Candidate'])
+rule7=ctrl.Rule(skill_match['Medium'] & experience['Some'],candidate_fit['Possible Fit'])
+rule8=ctrl.Rule(skill_match['High'] & experience['Extensive'],candidate_fit['Good Fit'])
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
