@@ -57,10 +57,33 @@ rule5=ctrl.Rule(skill_match['None'],candidate_fit['Poor Fit'])
 rule6=ctrl.Rule(skill_match['High'] & education['Advanced'],candidate_fit['Top Candidate'])
 rule7=ctrl.Rule(skill_match['Medium'] & experience['Some'],candidate_fit['Possible Fit'])
 rule8=ctrl.Rule(skill_match['High'] & experience['Extensive'],candidate_fit['Good Fit'])
-
-
-
-
+\\CREATE AND RUN THE CONTROL SYSTEM
+\\First,we create the control system by passing it our list of rules.
+fit_ctrl=ctrl.ControlSystem([rule1,rule2,rule3,rule4,rule5,rule6,rule7,rule8])
+\\Then,we create a simulation of this control system.This is what we will use to process the actual data.
+fit_simulation=ctrl.ControlSystemSimulation(fit_ctrl)
+\\PROVIDE INPUTS AND COMPUTE THE RESULT
+\\This is where we test our system with a sample candidate.
+\\Let's imagine a candidate with:
+\\-7 years of relevant experience
+\\-85% skil match
+\\-A Bachelore's degree(score=3)
+\\pass the crisp input values to the simulation
+fit_simulation.input['experience']=7
+fit_simulation.input['skill_match']=85
+fit_simulation.input['education']=3
+\\compute the result
+fit_simulation.compute()
+\\PRINT AND VISUALIZE THE OUTPUT
+\\Print the final calculated score(this process called defuzzification).
+print("\n---Candidate Evaluation Result---")
+print(f"Final candidate Fit Score:{fit_simulation.output['candidate_fit']:.2f}/100")
+print("_____________________________")
+\\Visualize the result.The plot shows how the final score was determined from the fuzzy sets
+\\The vertical line is the final score
+candidate_fit.view(sim=fit_simulation)
+\\This command ensures the plot is displayed.
+plt.show()
 
 
 
