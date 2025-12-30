@@ -1,54 +1,54 @@
-\\1.import librarie
-\\we need numpy for numerical arrays,skfuzzy for the fuzzy logic engine and matplotlib for plotting the resutls.
+#1.import librarie
+#we need numpy for numerical arrays,skfuzzy for the fuzzy logic engine and matplotlib for plotting the resutls.
 import numpy as np
 import skfuzzy as fuzz
 import matplotlib.pyplot as plt
 from skfuzzy import control as ctrl
-\\DEFINE FUZZY VARIABLES(INPUTS AND OUTPUT)
-\\These are the input(antecedents)and the output(consequent)of our system.
-\\we define their "universe" or range of possible values.
-\\INPUT1:Relevent experience(in year)
-\\Range: 0 to 15 years
+#DEFINE FUZZY VARIABLES(INPUTS AND OUTPUT)
+#These are the input(antecedents)and the output(consequent)of our system.
+#we define their "universe" or range of possible values.
+#INPUT1:Relevent experience(in year)
+#Range: 0 to 15 years
 experience=ctrl.Antecendent(np.arrange(0,16,1),'experience')
-\\INPUT2:skill match(as a percentage)
-\\Range:0% to 100%
+#INPUT2:skill match(as a percentage)
+#Range:0% to 100%
 skill_match=ctrl.Antecedent(np.arrange(0,101,1),'skill_match')
-\\INPUT3:Education level(as a numerical score)
-\\Range:1 to 5(e.g.,1=Diploma,3=Bachelore's,5=PHD)
+#INPUT3:Education level(as a numerical score)
+#Range:1 to 5(e.g.,1=Diploma,3=Bachelore's,5=PHD)
 education=ctrl.Antecedent(np.arrange(1,6,1),'education')
-\\OUTPUT:candidate fit score
-\Range:0 to 100 points
+#OUTPUT:candidate fit score
+#Range:0 to 100 points
 candidate_fit=ctrl.consequent(np.arange(0,101,1),'candidate_fit')
-\\DEFINE MEMBERSHIP FUNCTIONS
-\\here,we define the fuzzy sets for each variable(e.g.,"Low","Medium","High")
-\\we use triangular membership function(trimf)for simplicity.
-\\The numbers in the list represent the [start,peak,end]of the triangle.
-\\Membership function for 'experience'
+#DEFINE MEMBERSHIP FUNCTIONS
+#here,we define the fuzzy sets for each variable(e.g.,"Low","Medium","High")
+#we use triangular membership function(trimf)for simplicity.
+#The numbers in the list represent the [start,peak,end]of the triangle.
+#Membership function for 'experience'
 experience['None']=fuzz.trimf(experience.universe,[0,0,2])
 experience['Some']=fuzz.trimf(experience.universe,[1,4,7])
 experience['Matched']=fuzz.trimf(experience.universe,[5,8,11])
 experience['Extensive']=fuzz.trimf(experience.universe,[9,15,15])
-\\Membership function for 'Skill_match'
+#Membership function for 'Skill_match'
 skill_match['Low']=fuzz.trimf(skill_match.universe,[0,0,50])
 skill_match['Medium']=fuzz.trimf(skill_match.universe,[30,65,90])
 skill_match['High']=fuzz.trimf(skill_match.universe,[70,100,100])
-\\Membership function for 'education'
+#Membership function for 'education'
 education['Relevant']=fuzz.trimf(education.universe,[1,3,4])
 education['Advanced']=fuzz.trimf(education.universe,[3,5,5])
-\\Membership function for 'candidate_fit'
+#Membership function for 'candidate_fit'
 candidate_fit['Poor Fit']=fuzz.trimf(candidate_fit.universe,[0,0,40])
 candidate_fit['Possible Fit']=fuzz.trimf(candidate_fit.universe,[30,55,75])
 candidate_fit['Good Fit']=fuzz.trimf(candidate_fit.universe,[65,80,95])
 candidate_fit['Top Candidate']=fuzz.trimf(candidate_fit.universe,[85,100,100])
-\\You can uncomment these line to see the graphs of your membership functions.
-\\This is very useful for report!
-\\experience.view()
-\\skill_match.view()
-\\education.view()
-\\candidate_fit.view()
-\\DEFINE THE FUZZY RULES
-\\These are the IF-THEN rules that from "brain" of our system.
-\\The symbols are:& for AND,I for OR.
+#You can uncomment these line to see the graphs of your membership functions.
+#This is very useful for report!
+#experience.view()
+#skill_match.view()
+#education.view()
+#candidate_fit.view()
+#DEFINE THE FUZZY RULES
+#These are the IF-THEN rules that from "brain" of our system.
+#The symbols are:& for AND,I for OR.
 rule1=ctrl.Rule(skill_match['High'] & experience['Matched'],candidate_fit['Top Candidate'])
 rule2=ctrl.Rule(skill_match['High'] & experience['Some'],candidate_fit['Good Fit'])
 rule3=ctrl.Rule(skill_match['Medium'] & experience['Matched'],candidate_fit['Good Fit'])
@@ -57,32 +57,32 @@ rule5=ctrl.Rule(skill_match['None'],candidate_fit['Poor Fit'])
 rule6=ctrl.Rule(skill_match['High'] & education['Advanced'],candidate_fit['Top Candidate'])
 rule7=ctrl.Rule(skill_match['Medium'] & experience['Some'],candidate_fit['Possible Fit'])
 rule8=ctrl.Rule(skill_match['High'] & experience['Extensive'],candidate_fit['Good Fit'])
-\\CREATE AND RUN THE CONTROL SYSTEM
-\\First,we create the control system by passing it our list of rules.
+#CREATE AND RUN THE CONTROL SYSTEM
+#First,we create the control system by passing it our list of rules.
 fit_ctrl=ctrl.ControlSystem([rule1,rule2,rule3,rule4,rule5,rule6,rule7,rule8])
-\\Then,we create a simulation of this control system.This is what we will use to process the actual data.
+#Then,we create a simulation of this control system.This is what we will use to process the actual data.
 fit_simulation=ctrl.ControlSystemSimulation(fit_ctrl)
-\\PROVIDE INPUTS AND COMPUTE THE RESULT
-\\This is where we test our system with a sample candidate.
-\\Let's imagine a candidate with:
-\\-7 years of relevant experience
-\\-85% skil match
-\\-A Bachelore's degree(score=3)
-\\pass the crisp input values to the simulation
+#PROVIDE INPUTS AND COMPUTE THE RESULT
+#This is where we test our system with a sample candidate.
+#Let's imagine a candidate with:
+#-7 years of relevant experience
+#-85% skil match
+#-A Bachelore's degree(score=3)
+#pass the crisp input values to the simulation
 fit_simulation.input['experience']=7
 fit_simulation.input['skill_match']=85
 fit_simulation.input['education']=3
-\\compute the result
+#compute the result
 fit_simulation.compute()
-\\PRINT AND VISUALIZE THE OUTPUT
-\\Print the final calculated score(this process called defuzzification).
+#PRINT AND VISUALIZE THE OUTPUT
+#Print the final calculated score(this process called defuzzification).
 print("\n---Candidate Evaluation Result---")
 print(f"Final candidate Fit Score:{fit_simulation.output['candidate_fit']:.2f}/100")
 print("_____________________________")
-\\Visualize the result.The plot shows how the final score was determined from the fuzzy sets
-\\The vertical line is the final score
+#Visualize the result.The plot shows how the final score was determined from the fuzzy sets
+#The vertical line is the final score
 candidate_fit.view(sim=fit_simulation)
-\\This command ensures the plot is displayed.
+#This command ensures the plot is displayed.
 plt.show()
 
 
